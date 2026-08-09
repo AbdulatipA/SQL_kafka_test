@@ -6,6 +6,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class SQLUtil {
+    private final String JDBC_URL;
+    private final String JDBC_PASSWORD;
+    private final String JDBC_USERNAME;
+
+    public SQLUtil(String JDBC_URL, String JDBC_PASSWORD, String JDBC_USERNAME) {
+        this.JDBC_URL = JDBC_URL;
+        this.JDBC_PASSWORD = JDBC_PASSWORD;
+        this.JDBC_USERNAME = JDBC_USERNAME;
+    }
+
 
     public void sendSQLRequest(String sql) {
         try(Connection connection = getConnection()) {
@@ -15,13 +25,11 @@ public class SQLUtil {
         }
     }
 
-    private static Connection getConnection() {
+    private Connection getConnection() {
         try {
             return DriverManager.getConnection(
-                    ENVUtil.getEnvByName("JDBC_URL"),
-                    ENVUtil.getEnvByName("JDBC_USERNAME"),
-                    ENVUtil.getEnvByName("JDBC_PASSWORD")
-                    );
+                    JDBC_URL, JDBC_PASSWORD, JDBC_USERNAME
+            );
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
